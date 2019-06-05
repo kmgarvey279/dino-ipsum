@@ -2,6 +2,8 @@
   <head>
     <script src="http://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
     <script type="text/javascript" src="dino-interface.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
     <title>Dino-Ipsum</title>
   </head>
   <body>
@@ -18,12 +20,14 @@
       <div class="showRandomDino"></div>
       <button class="btn-info" id="start-game">Play Dino Hangman!</button>
       <div class="display-game">
-        <span id="correct-guesses"></span>
-        <span id="wrong-guesses"></span>
-        <span id="display-hangman"></span>
         <label for="guess">Enter a letter to see if it is found in the mystery dinosaur name!</label>
         <input id="guess" type="text" maxlength="1">
-        <button class="btn-info" id="check-letter">Check My Letter!</button>
+        <button class="btn-info" id="check-letter">Check My Letter!</button><br>
+        Mystery Dino:
+        <span id="correct-guesses"></span><br>
+        Wrong Guesses:
+        <span id="wrong-guesses"></span><br>
+        <span id="display-hangman"></span>
       </div>
     </div>
   </body>

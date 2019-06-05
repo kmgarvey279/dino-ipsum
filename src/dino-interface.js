@@ -1,4 +1,8 @@
 import { Hangman } from './hangman.js';
+import $ from 'jquery';
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './css/styles.css';
 
 $(document).ready(function() {
   $('#dinoSubmit').click(function() {
@@ -44,11 +48,11 @@ $(document).ready(function() {
         format: 'json'
       },
       success: function( response ) {
-        console.log("response " + response);
-        let answer = JSON.stringify(response);
-        console.log("answer " + answer);
+        let myString = JSON.stringify(response);
+        let answer = myString.replace(/\W/g, '').toLowerCase();
         newGame.setAnswer(answer);
         $("#correct-guesses").append(newGame.correctGuesses);
+        $(".display-game").show();
       },
       error: function() {
           $('.errors').text("There was an error processing your request. Please try again.");
@@ -57,26 +61,12 @@ $(document).ready(function() {
   });
   $('#check-letter').click(function() {
     let newGuess = $("#guess").val();
-    console.log("newGuess: " + newGuess);
     let result = newGame.guess(newGuess);
-    console.log("result: " + result);
-    if(result == true) {
-      $("#display-hangman").append("Correct!");
-    } else {
-      $("#display-hangman").append("Wrong!");
+    if(result == false) {
+      let count = newGame.totalWrong;
+      $("#display-hangman").append('<img src="img/dino' + count + '.jpg" weight="100px" height="300px" />');
     }
+    $("#correct-guesses").empty().append(newGame.correctGuesses);
+    $("#wrong-guesses").empty().append(newGame.wrongGuesses);
   })
 });
-
-
-
-// ///
-// var getDinos      = $.get('http://dinoipsum.herokuapp.com/api/?format=html'),
-//     fillContainer = function(html) {
-//       $('#some-awesome-container').html(html);
-//     },
-//     oops = function() {
-//       console.log('Where did all the dinosaurs go?');
-//     };
-//
-// getDinos.then(fillContainer, oops);
