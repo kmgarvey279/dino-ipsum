@@ -43,9 +43,10 @@ $(document).ready(function() {
       data: {
         format: 'json'
       },
-      success: function(response) {
+      success: function( response ) {
+        console.log("response " + response);
         let answer = JSON.stringify(response);
-        alert(answer);
+        console.log("answer " + answer);
         newGame.setAnswer(answer);
         $("#correct-guesses").append(newGame.correctGuesses);
       },
@@ -56,7 +57,9 @@ $(document).ready(function() {
   });
   $('#check-letter').click(function() {
     let newGuess = $("#guess").val();
+    console.log("newGuess: " + newGuess);
     let result = newGame.guess(newGuess);
+    console.log("result: " + result);
     if(result == true) {
       $("#display-hangman").append("Correct!");
     } else {
