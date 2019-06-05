@@ -12,8 +12,19 @@
       <label for="words">Enter the number of words you want per paragraph:</label>
       <input id="words" type="number">
       <button class="btn-success" id="dinoSubmit">Get Dinos!</button>
+      <button class="btn-info" id="randomDino">Show Me a Random Dino!</button>
       <div class="errors"></div>
       <div class="showDinos"></div>
+      <div class="showRandomDino"></div>
+      <button class="btn-info" id="start-game">Play Dino Hangman!</button>
+      <div class="display-game">
+        <span id="correct-guesses"></span>
+        <span id="wrong-guesses"></span>
+        <span id="display-hangman"></span>
+        <label for="guess">Enter a letter to see if it is found in the mystery dinosaur name!</label>
+        <input id="guess" type="text" maxlength="1">
+        <button class="btn-info" id="check-letter">Check My Letter!</button>
+      </div>
     </div>
   </body>
 </html>
