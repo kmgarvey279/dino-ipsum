@@ -60,6 +60,7 @@ $(document).ready(function() {
     });
   });
   $('#check-letter').click(function() {
+
     let newGuess = $("#guess").val();
     let result = newGame.guess(newGuess);
     if(result == false) {
