@@ -50,7 +50,7 @@ export class Hangman {
       return "Game Over";
     } else if(this.correctGuesses.join("") == this.answer) {
       this.game = false;
-      return "You Win!"
+      return "You Win!";
     }
   }
 

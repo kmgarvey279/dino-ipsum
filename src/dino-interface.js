@@ -73,7 +73,7 @@ $(document).ready(function() {
             $("#start-game").show();
             newGame.resetAll();
           }
-        }, 1000);
+        }, 100);
           $("#start-game").hide();
       },
       error: function() {
@@ -82,21 +82,36 @@ $(document).ready(function() {
     });
   });
   $('#check-letter').click(function() {
-    $("#guess").val("");
-    let newGuess = $("#guess").val();
+    let newGuess = $("#guess").val().toLowerCase();
+    // try catch example:
+    // function checkLetter(char) {
+    //   if(!char.match(/[a-z]/i)) {
+    //     return new Error("not a valid letter!");
+    //   } else {
+    //     return true;
+    //   }
+    // }
+    //
+    // try {
+    //   const isInputALetter = checkLetter(newGuess);
+    //   if (isInputALetter instanceof Error) {
+    //     console.error(isInputALetter.message);
+    //     throw Error("Not a valid letter!");
+    //   } else {
+    //     console.log("Try was successful");
+    //   }
+    // } catch(error) {
+    //   console.error(`Error: ${error.message}`)
+    // }
     let result = newGame.guess(newGuess);
-
+    $("#guess").val("");
     if(result == false || newGame.timeLeft == 0) {
       let count = newGame.totalWrong;
       $("#display-hangman").append('<img src="img/dino' + count + '.jpg" weight="100px" height="300px" />');
     }
-
     $("#correct-guesses").empty().append(newGame.correctGuesses);
     $("#wrong-guesses").empty().append(newGame.wrongGuesses);
     $("#timer").empty().append("Time Left: " + newGame.timeLeft);
     $("#game-over").append(newGame.gameOverCheck());
   })
 });
-
-
-///
