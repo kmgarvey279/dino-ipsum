@@ -53,6 +53,20 @@ $(document).ready(function() {
         newGame.setAnswer(answer);
         $("#correct-guesses").append(newGame.correctGuesses);
         $(".display-game").show();
+        $("#start-game").hide();
+        newGame.setTime();
+        let displayTimer = setInterval(function() {
+          $("#timer").empty().append(newGame.timeLeft);
+          if(newGame.timeLeft == 0) {
+            newGame.totalWrong++;
+            $("#display-hangman").append('<img src="img/dino' + newGame.totalWrong + '.jpg" weight="100px" height="300px" />');
+            newGame.gameOverCheck();
+            if (this.game === false){
+              $(".display-game").hide();
+            }
+            newGame.resetTime();
+          }
+        }, 1000)
       },
       error: function() {
           $('.errors').text("There was an error processing your request. Please try again.");
@@ -60,14 +74,18 @@ $(document).ready(function() {
     });
   });
   $('#check-letter').click(function() {
-
     let newGuess = $("#guess").val();
     let result = newGame.guess(newGuess);
-    if(result == false) {
+    if(result == false || newGame.timeLeft == 0) {
       let count = newGame.totalWrong;
       $("#display-hangman").append('<img src="img/dino' + count + '.jpg" weight="100px" height="300px" />');
     }
     $("#correct-guesses").empty().append(newGame.correctGuesses);
     $("#wrong-guesses").empty().append(newGame.wrongGuesses);
+    $("#timer").empty().append("Time Left: " + newGame.timeLeft);
+    $("#game-over").append(newGame.gameOverCheck());
   })
 });
+
+
+///
