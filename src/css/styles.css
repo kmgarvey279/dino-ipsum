@@ -3,5 +3,9 @@
 }
 
 body {
-  background-color: green;
+  background-color: teal;
+}
+
+a {
+  color: darkgreen;
 }
