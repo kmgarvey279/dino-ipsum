@@ -82,6 +82,7 @@ $(document).ready(function() {
     });
   });
   $('#check-letter').click(function() {
+    $("#guess").val("");
     let newGuess = $("#guess").val();
     let result = newGame.guess(newGuess);
 
@@ -89,6 +90,7 @@ $(document).ready(function() {
       let count = newGame.totalWrong;
       $("#display-hangman").append('<img src="img/dino' + count + '.jpg" weight="100px" height="300px" />');
     }
+
     $("#correct-guesses").empty().append(newGame.correctGuesses);
     $("#wrong-guesses").empty().append(newGame.wrongGuesses);
     $("#timer").empty().append("Time Left: " + newGame.timeLeft);
