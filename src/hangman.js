@@ -8,6 +8,14 @@ export class Hangman {
     this.game = true;
   }
 
+  resetAll(){
+    this.totalWrong = 0;
+    this.answer = "";
+    this.correctGuesses = new Array();
+    this.wrongGuesses = new Array();
+    this.timeLeft = 10;
+    this.game = true;
+  }
 
   setAnswer(answerInput) {
     this.answer = answerInput;
@@ -35,18 +43,21 @@ export class Hangman {
   }
 
   gameOverCheck() {
+    console.log(this.correctGuesses.join(""));
+    console.log(this.answer);
     if(this.totalWrong == 7) {
-      setTimeout(function(){
-        this.game = false;
-      }, 2000);
+      this.game = false;
       return "Game Over";
+    } else if(this.correctGuesses.join("") == this.answer) {
+      this.game = false;
+      return "You Win!"
     }
   }
 
   setTime() {
     setInterval(() => {
       this.timeLeft--;
-    }, 1000);
+    }, 1000); // sped up to test
   }
 
   resetTime() {

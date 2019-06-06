@@ -41,6 +41,7 @@ $(document).ready(function() {
   let newGame = new Hangman();
 
   $('#start-game').click(function() {
+    $("#game-over").empty();
     $.ajax({
       url : `http://dinoipsum.herokuapp.com/api/?paragraphs=1&words=1`,
       type: 'GET',
@@ -51,22 +52,29 @@ $(document).ready(function() {
         let myString = JSON.stringify(response);
         let answer = myString.replace(/\W/g, '').toLowerCase();
         newGame.setAnswer(answer);
+        console.log(answer);
         $("#correct-guesses").append(newGame.correctGuesses);
         $(".display-game").show();
-        $("#start-game").hide();
         newGame.setTime();
+
         let displayTimer = setInterval(function() {
           $("#timer").empty().append(newGame.timeLeft);
           if(newGame.timeLeft == 0) {
             newGame.totalWrong++;
             $("#display-hangman").append('<img src="img/dino' + newGame.totalWrong + '.jpg" weight="100px" height="300px" />');
-            newGame.gameOverCheck();
-            if (this.game === false){
-              $(".display-game").hide();
-            }
+            $("#game-over").append(newGame.gameOverCheck());
             newGame.resetTime();
           }
-        }, 1000)
+          if (newGame.game === false){
+            $("#correct-guesses").empty();
+            $("#wrong-guesses").empty();
+            $("#display-hangman").empty();
+            $(".display-game").hide();
+            $("#start-game").show();
+            newGame.resetAll();
+          }
+        }, 1000);
+          $("#start-game").hide();
       },
       error: function() {
           $('.errors').text("There was an error processing your request. Please try again.");
@@ -76,6 +84,7 @@ $(document).ready(function() {
   $('#check-letter').click(function() {
     let newGuess = $("#guess").val();
     let result = newGame.guess(newGuess);
+
     if(result == false || newGame.timeLeft == 0) {
       let count = newGame.totalWrong;
       $("#display-hangman").append('<img src="img/dino' + count + '.jpg" weight="100px" height="300px" />');
