@@ -4,6 +4,45 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/styles.css';
 
+let newGame = new Hangman();
+
+function startGame(newResponse) {
+  $("#start-game").hide();
+  let myString = JSON.stringify(newResponse);
+  let answer = myString.replace(/\W/g, '').toLowerCase();
+  newGame.setAnswer(answer);
+  newGame.setTime();
+  console.log(answer);
+  $("#correct-guesses").append(newGame.correctGuesses);
+  $(".display-game").show();
+}
+
+function timeUp() {
+  if(newGame.timeLeft == 0) {
+    newGame.totalWrong++;
+    $("#display-hangman").append('<img src="img/dino' + newGame.totalWrong + '.jpg" weight="100px" height="300px" />');
+    newGame.resetTime();
+  }
+}
+function endGame() {
+  newGame.gameOverCheck();
+  if (newGame.game === false){
+    $("#game-over").append(newGame.gameOverCheck());
+    resetGame();
+  }
+}
+
+function resetGame() {
+  setTimeout(() => {
+    $("#correct-guesses").empty();
+    $("#wrong-guesses").empty();
+    $("#display-hangman").empty();
+    $(".display-game").hide();
+    $("#start-game").show();
+    newGame.resetAll();
+  }, 4000); 
+}
+
 $(document).ready(function() {
   $('#dinoSubmit').click(function() {
     let paragraphs = $('#paragraphs').val();
@@ -38,10 +77,7 @@ $(document).ready(function() {
     });
   });
 
-  let newGame = new Hangman();
-
   $('#start-game').click(function() {
-    $("#game-over").empty();
     $.ajax({
       url : `http://dinoipsum.herokuapp.com/api/?paragraphs=1&words=1`,
       type: 'GET',
@@ -49,32 +85,15 @@ $(document).ready(function() {
         format: 'json'
       },
       success: function( response ) {
-        let myString = JSON.stringify(response);
-        let answer = myString.replace(/\W/g, '').toLowerCase();
-        newGame.setAnswer(answer);
-        console.log(answer);
-        $("#correct-guesses").append(newGame.correctGuesses);
-        $(".display-game").show();
-        newGame.setTime();
-
+        startGame(response);
         let displayTimer = setInterval(function() {
           $("#timer").empty().append(newGame.timeLeft);
-          if(newGame.timeLeft == 0) {
-            newGame.totalWrong++;
-            $("#display-hangman").append('<img src="img/dino' + newGame.totalWrong + '.jpg" weight="100px" height="300px" />');
-            $("#game-over").append(newGame.gameOverCheck());
-            newGame.resetTime();
+          timeUp();
+          endGame();
+          if(newGame.game == false) {
+            clearInterval(displayTimer);
           }
-          if (newGame.game === false){
-            $("#correct-guesses").empty();
-            $("#wrong-guesses").empty();
-            $("#display-hangman").empty();
-            $(".display-game").hide();
-            $("#start-game").show();
-            newGame.resetAll();
-          }
-        }, 100);
-          $("#start-game").hide();
+        }, 1000);
       },
       error: function() {
           $('.errors').text("There was an error processing your request. Please try again.");
@@ -104,14 +123,14 @@ $(document).ready(function() {
     //   console.error(`Error: ${error.message}`)
     // }
     let result = newGame.guess(newGuess);
-    $("#guess").val("");
-    if(result == false || newGame.timeLeft == 0) {
+    if(result == false) {
       let count = newGame.totalWrong;
       $("#display-hangman").append('<img src="img/dino' + count + '.jpg" weight="100px" height="300px" />');
     }
     $("#correct-guesses").empty().append(newGame.correctGuesses);
     $("#wrong-guesses").empty().append(newGame.wrongGuesses);
-    $("#timer").empty().append("Time Left: " + newGame.timeLeft);
-    $("#game-over").append(newGame.gameOverCheck());
-  })
+    $("#timer").empty().append(newGame.timeLeft);
+
+    $("#guess").val("");
+  });
 });
